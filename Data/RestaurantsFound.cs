@@ -33,9 +33,67 @@ namespace Data
             return restaurantsBasic;
         }
 
+        /// <summary>
+        /// Loads all restaurants found
+        /// </summary>
+        /// <returns></returns>
         public static bool LoadRestaurantsFound()
         {
+            //List<RestaurantFoundBO> aux = new List<RestaurantFoundBO>();
+            //JsonSerializer jsonSerializer = new JsonSerializer();
+            if (File.Exists(filePath))
+            {
 
+                #region METHOD1
+                //try
+                //{
+                //    StreamReader sr = new StreamReader(filePath);
+                //    JsonReader jsonReader = new JsonTextReader(sr);
+
+                //    //aux = jsonSerializer.Deserialize<List<RestaurantFoundBO>>(jsonReader);
+                //    restaurantsFound = jsonSerializer.Deserialize<List<RestaurantFound>>(jsonReader);
+                //    jsonReader.Close();
+                //    sr.Close();
+
+                //    StreamReader streamReadRestaurants = new StreamReader(filePath);
+                //    JsonReader jsonReader_Restaurants = new JsonTextReader(sr);
+
+                //    aux = jsonSerializer.Deserialize<List<RestaurantFoundBO>>(jsonReader);
+
+                //    streamReadRestaurants.Close();
+                //    jsonReader_Restaurants.Close();
+
+                //    return true;
+                //}
+                //catch (Exception e) { throw e; }
+
+                #endregion
+
+                #region METHOD2
+                List<RestaurantFound> auxEvaluations = new List<RestaurantFound>();
+                List<RestaurantFoundBO> auxRestaurantsInfo = new List<RestaurantFoundBO>();
+
+                auxEvaluations = LoadAvaliacoes();
+                auxRestaurantsInfo = LoadRestaurantsInfo();
+                int i = 0;
+
+                foreach (RestaurantFound restaurantEv in auxEvaluations)
+                {
+                    restaurantEv.restaurantFound = auxRestaurantsInfo[i];
+                    restaurantsFound.Add(restaurantEv);
+                }
+                #endregion
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Loads rates from costumers, for each restaurant found
+        /// </summary>
+        /// <returns></returns>
+        public static List<RestaurantFound> LoadAvaliacoes()
+        {
+            List<RestaurantFound> restaurantsEvaluations = new List<RestaurantFound>();
             JsonSerializer jsonSerializer = new JsonSerializer();
             if (File.Exists(filePath))
             {
@@ -44,15 +102,37 @@ namespace Data
                     StreamReader sr = new StreamReader(filePath);
                     JsonReader jsonReader = new JsonTextReader(sr);
 
-                    restaurantsFound = jsonSerializer.Deserialize<List<RestaurantFound>>(jsonReader);
-                    jsonReader.Close();
-                    sr.Close();
-
-                    return true;
+                    restaurantsEvaluations = jsonSerializer.Deserialize<List<RestaurantFound>>(jsonReader);
                 }
                 catch (Exception e) { throw e; }
             }
-            return false;
+            return restaurantsEvaluations;
+        }
+
+        /// <summary>
+        /// Loads RestaurantFoundBO part, from main class "RestaurantFound"
+        /// </summary>
+        /// <returns></returns>
+        public static List<RestaurantFoundBO> LoadRestaurantsInfo()
+        {
+            List<RestaurantFoundBO> restaurantsFoundInfo = new List<RestaurantFoundBO>();
+            JsonSerializer jsonSerializer = new JsonSerializer();
+            if (File.Exists(filePath))
+            {
+                try
+                {
+                    StreamReader sr = new StreamReader(filePath);
+                    JsonReader jsonReader = new JsonTextReader(sr);
+
+                    restaurantsFoundInfo = jsonSerializer.Deserialize<List<RestaurantFoundBO>>(jsonReader);
+
+                    sr.Close();
+                    jsonReader.Close();
+                        
+                }
+                catch (Exception e) { throw e; }
+            }
+            return restaurantsFoundInfo;
         }
 
     }
