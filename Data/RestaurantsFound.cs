@@ -35,7 +35,7 @@ namespace Data
 
         public static bool LoadRestaurantsFound()
         {
-            List<RestaurantFoundBO> aux = new List<RestaurantFoundBO>();
+
             JsonSerializer jsonSerializer = new JsonSerializer();
             if (File.Exists(filePath))
             {
@@ -43,9 +43,8 @@ namespace Data
                 {
                     StreamReader sr = new StreamReader(filePath);
                     JsonReader jsonReader = new JsonTextReader(sr);
-                    restaurantsFound = jsonSerializer.Deserialize<List<RestaurantFound>>(jsonReader);
 
-                    //aux = jsonSerializer.Deserialize<List<RestaurantFoundBO>>(jsonReader);
+                    restaurantsFound = jsonSerializer.Deserialize<List<RestaurantFound>>(jsonReader);
                     jsonReader.Close();
                     sr.Close();
 
